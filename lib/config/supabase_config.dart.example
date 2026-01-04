@@ -1,0 +1,13 @@
+/// Supabase configuration template
+///
+/// Copy this file to supabase_config.dart and fill in your credentials
+/// You can find these in your Supabase project settings:
+/// https://app.supabase.com/project/_/settings/api
+class SupabaseConfig {
+  // Replace with your Supabase URL
+  static const String supabaseUrl = 'YOUR_SUPABASE_URL_HERE';
+
+  // Replace with your Supabase anon key
+  static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY_HERE';
+}
+
