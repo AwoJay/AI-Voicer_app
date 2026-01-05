@@ -45,50 +45,45 @@ class GetStartedScreen extends ConsumerWidget {
               const Text(
                 "Let's dive in into your account",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const Spacer(flex: 2),
               // Social login buttons
               _SocialLoginButton(
                 icon: Icons.g_mobiledata,
                 label: 'Continue with Google',
-                onPressed: () => _handleSocialLogin(
-                  ref,
-                  OAuthProvider.google,
-                ),
+                onPressed:
+                    () =>
+                        _handleSocialLogin(context, ref, OAuthProvider.google),
                 iconColor: Colors.white,
               ),
               const SizedBox(height: 16),
               _SocialLoginButton(
                 icon: Icons.apple,
                 label: 'Continue with Apple',
-                onPressed: () => _handleSocialLogin(
-                  ref,
-                  OAuthProvider.apple,
-                ),
+                onPressed:
+                    () => _handleSocialLogin(context, ref, OAuthProvider.apple),
                 iconColor: Colors.white,
               ),
               const SizedBox(height: 16),
               _SocialLoginButton(
                 icon: Icons.facebook,
                 label: 'Continue with Facebook',
-                onPressed: () => _handleSocialLogin(
-                  ref,
-                  OAuthProvider.facebook,
-                ),
+                onPressed:
+                    () => _handleSocialLogin(
+                      context,
+                      ref,
+                      OAuthProvider.facebook,
+                    ),
                 iconColor: const Color(0xFF1877F2),
               ),
               const SizedBox(height: 16),
               _SocialLoginButton(
                 icon: Icons.alternate_email,
                 label: 'Continue with Twitter',
-                onPressed: () => _handleSocialLogin(
-                  ref,
-                  OAuthProvider.twitter,
-                ),
+                onPressed:
+                    () =>
+                        _handleSocialLogin(context, ref, OAuthProvider.twitter),
                 iconColor: const Color(0xFF1DA1F2),
               ),
               const SizedBox(height: 32),
@@ -114,10 +109,7 @@ class GetStartedScreen extends ConsumerWidget {
                   ),
                   child: const Text(
                     'Sign up',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -144,10 +136,7 @@ class GetStartedScreen extends ConsumerWidget {
                   ),
                   child: const Text(
                     'Login',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -160,13 +149,22 @@ class GetStartedScreen extends ConsumerWidget {
   }
 
   Future<void> _handleSocialLogin(
+    BuildContext context,
     WidgetRef ref,
     OAuthProvider provider,
   ) async {
     try {
       await ref.read(authProvider.notifier).signInWithOAuth(provider);
     } catch (e) {
-      // Handle error - could show a snackbar
+      // Show error message to user
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login failed: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 }
@@ -207,10 +205,7 @@ class _SocialLoginButton extends StatelessWidget {
             const SizedBox(width: 12),
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -218,4 +213,3 @@ class _SocialLoginButton extends StatelessWidget {
     );
   }
 }
-

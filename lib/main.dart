@@ -13,14 +13,25 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Supabase before running the app
-  try {
-    await Supabase.initialize(
-      url: SupabaseConfig.supabaseUrl,
-      anonKey: SupabaseConfig.supabaseAnonKey,
-    );
-  } catch (e) {
-    debugPrint('Error initializing Supabase: $e');
-    // Continue anyway - error will be shown in UI
+  // Only initialize if credentials are configured (not placeholders)
+  final hasValidConfig = SupabaseConfig.supabaseUrl != 'YOUR_SUPABASE_URL_HERE' &&
+      SupabaseConfig.supabaseAnonKey != 'YOUR_SUPABASE_ANON_KEY_HERE' &&
+      SupabaseConfig.supabaseUrl.isNotEmpty &&
+      SupabaseConfig.supabaseAnonKey.isNotEmpty;
+
+  if (hasValidConfig) {
+    try {
+      await Supabase.initialize(
+        url: SupabaseConfig.supabaseUrl,
+        anonKey: SupabaseConfig.supabaseAnonKey,
+      );
+      debugPrint('Supabase initialized successfully');
+    } catch (e) {
+      debugPrint('Error initializing Supabase: $e');
+      // Continue anyway - error will be shown in UI
+    }
+  } else {
+    debugPrint('Supabase not configured - using placeholder credentials. Please update lib/config/supabase_config.dart');
   }
 
   runApp(const ProviderScope(child: VoicerApp()));
